@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Use the Studio — DuoVoice Studio</title>
+<meta name="description" content="A complete guide to writing a two-person script, choosing voices, adding emotion and pauses, and exporting audio, subtitles and video.">
+<meta name="theme-color" content="#0f766e">
+<meta property="og:site_name" content="DuoVoice Studio">
+<meta property="og:title" content="How to Use the Studio — DuoVoice Studio">
+<meta property="og:description" content="A complete guide to writing a two-person script, choosing voices, adding emotion and pauses, and exporting audio, subtitles and video.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fbf7f1'/%3E%3Ccircle cx='25' cy='32' r='15' fill='%230f766e'/%3E%3Ccircle cx='39' cy='32' r='15' fill='%23e4572e' fill-opacity='.85'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/shared.css">
+<!-- AdSense: after your account is approved, paste Google's ad script here (inside <head>). -->
+</head>
+<body>
+<a href="#main" style="position:absolute;left:-999px">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Duo<span>Voice</span> Studio</a>
+    <nav class="site-nav" aria-label="Main"><a href="/">Studio</a><a href="/how-to.html" aria-current="page">How to Use</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav>
+  </div>
+</header>
+<main id="main" class="wrap">
+
+<article class="prose">
+  <h1>How to use DuoVoice Studio</h1>
+  <p class="meta">A complete guide to scripts, voices, emotion, pauses, subtitles, music and video.</p>
+
+  <h2>1. Write your script</h2>
+  <p>Every line starts with the speaker's name, followed by a colon. The studio supports <strong>exactly two speakers</strong>, called
+  <em>Host</em> and <em>Guest</em> by default. A line without a name continues the previous speaker's turn, so you can write a long answer across several lines.</p>
+<pre>Host: Welcome back to the show. Today we're talking about sleep.
+Guest (excited): Thanks for having me! It's a stranger story than most people expect.
+Host (curious): Let's start simple. What happens to the body at night?
+Guest: Quite a lot. {pause 0.6} {thoughtful} The brain replays the day and files memories away.</pre>
+
+  <h2>2. Rename your speakers</h2>
+  <p>Type any name in the two speaker boxes (for example <em>Nora</em> and <em>Jack</em>) and use those same names in the script.
+  Labels are matched to the names you set; <code>Speaker 1</code> and <code>Speaker 2</code> also always work. If your script contains a third label, the studio
+  stops and tells you, because only two voices are available.</p>
+
+  <h2>3. Things that are not spoken</h2>
+  <ul>
+    <li>Anything in <code>[square brackets]</code>, such as <code>[laughs]</code> or <code>[music fades in]</code>, is skipped. Use it for notes to yourself.</li>
+    <li>Markdown symbols such as <code>*</code>, <code>#</code> and <code>`</code> are removed before the text is read.</li>
+  </ul>
+
+  <h2>4. Choose a voice for each speaker</h2>
+  <p>Use the language filter, then pick a voice for each speaker. Mixing a male and a female voice (or a deeper and a lighter one) is the easiest way to make
+  two speakers easy to tell apart. The <strong>Speed</strong> and <strong>Pitch</strong> sliders let you fine-tune each voice; small changes (a few percent) sound
+  most natural.</p>
+
+  <h2>5. Add emotion</h2>
+  <p>Put an emotion in parentheses after a name to apply it to the whole turn, or switch mid-turn with a tag in curly braces:</p>
+<pre>Guest (sad): It was a hard year.
+Host: I'm sorry to hear that. {pause 1.0} {calm} Take your time.</pre>
+  <p>Available emotions: <strong>neutral, happy, excited, curious, surprised, serious, thoughtful, calm, sad</strong>. A few synonyms also work
+  (<em>cheerful, enthusiastic, shocked, gentle, reflective</em>). Be aware of what these are: each one adjusts speaking speed, pitch and volume. They suggest a mood;
+  they are not a full acting performance. The <strong>Emotion strength</strong> slider scales the effect (0 turns it off, 2 doubles it), so generate a short test first.</p>
+
+  <h2>6. Pauses and pacing</h2>
+  <p>Use <code>{pause}</code> for a short beat or <code>{pause 1.5}</code> for a specific length in seconds (maximum 10). The
+  <strong>Pause between turns</strong> slider sets the default gap when speakers swap, and <strong>Natural pause variation</strong> adds a tiny random difference so the rhythm
+  does not feel mechanical.</p>
+
+  <h2>7. Subtitles</h2>
+  <p>Tick <strong>Also create subtitles (.srt)</strong> before generating. You get a timed subtitle file you can upload to YouTube or any video editor.
+  Subtitles must be enabled at generation time if you later want captions burned into a video.</p>
+
+  <h2>8. Background music</h2>
+  <p>Pick one of the built-in loops and set its volume. The music fades in and out and is looped or trimmed to match the length of your episode. A level around
+  &minus;18 dB keeps speech clear; go lower (&minus;24 dB) for a subtler bed.</p>
+
+  <h2>9. Turn the episode into a video</h2>
+  <p>When the audio is ready, a video panel appears. Upload one image to show it for the whole episode, or several images for a slideshow where each picture gets an equal share
+  of the running time. Choose MP4 (works everywhere, ideal for YouTube) or WebM, and optionally burn the captions into the picture. Landscape 16:9 images look best because
+  the video is rendered at 1280&times;720; other shapes are scaled to fit with bars at the sides.</p>
+
+  <h2>10. Limits and troubleshooting</h2>
+  <ul>
+    <li><strong>Script length and rate limits:</strong> each script has a maximum length, and each visitor can generate a limited number of episodes per hour, one at a time. The exact numbers are shown above the script box.</li>
+    <li><strong>Files are temporary:</strong> generated files are deleted about two hours after creation, so download what you need.</li>
+    <li><strong>A line was treated as a speaker name:</strong> a short phrase followed by a colon at the start of a line (like <code>Note:</code> or <code>Tip:</code>) is read as a speaker label. Rephrase it, or put it in [brackets].</li>
+    <li><strong>"The voice service refused the request":</strong> the studio relies on a third-party voice service that sometimes rejects or throttles requests. Wait a minute and try again, ideally with a shorter script.</li>
+  </ul>
+
+  <div class="cta">
+    <p><strong>Ready to try it?</strong></p>
+    <p><a class="btn" href="/">Open the studio</a></p>
+  </div>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; 2026 DuoVoice Studio. Founder: Ahmed.</span>
+    <span class="footer-links">
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/contact.html">Contact</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

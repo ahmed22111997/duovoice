@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DuoVoice Studio — Free Two-Voice Podcast & Dialogue Generator</title>
+<meta name="description" content="Turn a two-person script into a podcast episode. Choose two voices, add music and subtitles, and export audio or video. Free, no sign-up.">
+<meta name="theme-color" content="#0f766e">
+<meta property="og:site_name" content="DuoVoice Studio">
+<meta property="og:title" content="DuoVoice Studio — Free Two-Voice Podcast & Dialogue Generator">
+<meta property="og:description" content="Turn a two-person script into a podcast episode. Choose two voices, add music and subtitles, and export audio or video. Free, no sign-up.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fbf7f1'/%3E%3Ccircle cx='25' cy='32' r='15' fill='%230f766e'/%3E%3Ccircle cx='39' cy='32' r='15' fill='%23e4572e' fill-opacity='.85'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/shared.css">
+<!-- AdSense: after your account is approved, paste Google's ad script here (inside <head>). -->
+</head>
+<body>
+<a href="#main" style="position:absolute;left:-999px">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Duo<span>Voice</span> Studio</a>
+    <nav class="site-nav" aria-label="Main"><a href="/" aria-current="page">Studio</a><a href="/how-to.html">How to Use</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav>
+  </div>
+</header>
+<main id="main" class="wrap">
+
+<section class="hero">
+  <h1>Turn a two-person script into a finished podcast episode</h1>
+  <p class="lead">Write a conversation between a Host and a Guest, pick two voices, and download an MP3 with natural pacing. Add background music and subtitles, or combine the audio with your own images to export a video. Free, with no sign-up.</p>
+</section>
+
+<section class="card" id="studio" aria-labelledby="studio-title">
+  <h2 id="studio-title" style="margin-top:0">Studio</h2>
+
+  <label for="script">Script</label>
+  <textarea id="script" spellcheck="false" aria-describedby="limitsHint"></textarea>
+  <div class="hint" id="limitsHint"></div>
+  <div class="hint">
+    Write one line per turn: <code>Host: text</code> and <code>Guest: text</code>. A line with no name continues the previous speaker.
+    <code>[notes in brackets]</code> are not spoken. Emotion for a whole turn: <code>Guest (excited): ...</code>. Mid-turn: <code>{sad}</code>. Pause: <code>{pause 1.5}</code>.
+    Emotions: <span id="emotionList"></span>. <a href="/how-to.html">Full guide</a>
+  </div>
+
+  <label for="lang">Voice language</label>
+  <select id="lang"></select>
+
+  <div class="grid-2" id="speakers" style="margin-top:14px"></div>
+
+  <div class="row" style="margin-top:14px">
+    <div>
+      <label for="gap">Pause between turns: <span id="gapVal" class="rangeval"></span> s</label>
+      <input type="range" id="gap" min="0.1" max="1.5" step="0.05" value="0.45">
+    </div>
+    <div>
+      <label for="maxChars">Max characters per request: <span id="maxCharsVal" class="rangeval"></span></label>
+      <input type="range" id="maxChars" min="200" max="1500" step="50" value="600">
+    </div>
+    <div>
+      <label for="strength">Emotion strength: <span id="strengthVal" class="rangeval"></span></label>
+      <input type="range" id="strength" min="0" max="2" step="0.1" value="1.0">
+    </div>
+  </div>
+
+  <div class="checks">
+    <label><input type="checkbox" id="srt"> Also create subtitles (.srt)</label>
+    <label><input type="checkbox" id="jitter" checked> Natural pause variation</label>
+  </div>
+
+  <div class="row" style="margin-top:6px">
+    <div style="flex:2">
+      <label for="musicTrack">Background music (optional)</label>
+      <select id="musicTrack"><option value="">None</option></select>
+    </div>
+    <div>
+      <label for="musicVol">Music volume: <span id="musicVolVal" class="rangeval"></span> dB</label>
+      <input type="range" id="musicVol" min="-40" max="0" step="1" value="-18">
+    </div>
+  </div>
+  <div class="hint">Music fades in and out and loops or trims to match your episode.</div>
+
+  <div style="margin-top:20px">
+    <label for="accessPw">Access password</label>
+    <input type="password" id="accessPw" autocomplete="current-password" style="max-width:260px">
+    <div class="hint">Generating episodes is limited to the site owner.</div>
+  </div>
+
+  <div style="margin-top:20px"><button class="btn" id="genBtn">Generate episode</button></div>
+
+  <div id="status" role="status" aria-live="polite"></div>
+  <audio id="player" controls style="display:none"></audio>
+  <div class="files" id="files"></div>
+
+  <div class="video-panel" id="videoPanel" style="display:none">
+    <h3>Turn it into a video</h3>
+    <p class="hint" style="margin-top:0">Upload one image to show for the whole episode, or several for a slideshow where each image gets an equal share of the time. Landscape 16:9 images look best.</p>
+    <input type="file" id="videoImages" accept="image/jpeg,image/png,image/webp" multiple>
+    <div class="row">
+      <div>
+        <label for="videoFormat">Format</label>
+        <select id="videoFormat">
+          <option value="mp4">MP4 (recommended, works everywhere)</option>
+          <option value="webm">WebM</option>
+        </select>
+      </div>
+    </div>
+    <div class="checks"><label><input type="checkbox" id="burnSubs"> Burn captions into the video</label></div>
+    <div class="hint" id="burnSubsHint"></div>
+    <div style="margin-top:14px"><button class="btn secondary" id="makeVideoBtn">Create video</button></div>
+    <div id="videoStatus" role="status" aria-live="polite"></div>
+    <video id="videoPlayer" controls style="display:none"></video>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="how-title">
+  <h2 id="how-title">How it works</h2>
+  <div class="grid-3">
+    <div class="card"><div class="step-num">1</div><h3>Write the conversation</h3><p>Type or paste a dialogue between a Host and a Guest. Give each line a name, and add emotions or pauses where you want them.</p></div>
+    <div class="card"><div class="step-num">2</div><h3>Choose two voices</h3><p>Pick a language and a voice for each speaker, then fine-tune speed and pitch. Add a music bed and subtitles if you like.</p></div>
+    <div class="card"><div class="step-num">3</div><h3>Generate and download</h3><p>Listen to the result, download MP3, WAV or SRT files, or add images to export a captioned video.</p></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="uses-title">
+  <h2 id="uses-title">What people make with it</h2>
+  <div class="grid-2">
+    <div class="card"><h3>Podcast pilots and faceless shows</h3><p>Hear a draft before you commit, test a format, or publish a conversational show without recording every line.</p></div>
+    <div class="card"><h3>Language-learning dialogues</h3><p>Create listening practice at the right level, slow the voices down, and add pauses for repetition. <a href="/blog/practice-a-language-with-dialogues.html">Read the guide</a>.</p></div>
+    <div class="card"><h3>Explainer videos</h3><p>Present an idea as a conversation, pair it with images, and export a video with captions. <a href="/blog/turn-podcast-into-video-with-subtitles.html">See how</a>.</p></div>
+    <div class="card"><h3>Audio versions of written ideas</h3><p>Turn an interview, a Q&amp;A or a blog outline into something people can listen to while they commute.</p></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="tips-title">
+  <h2 id="tips-title">Tips for dialogue that sounds human</h2>
+  <p>Keep turns short, let one speaker ask and the other explain, and use contractions the way people do when they talk. Read the script out loud before you generate it: if you stumble, a listener will too.
+  Use <code>{pause}</code> for a beat after a surprising line, and use emotions sparingly, because a little goes a long way. For a deeper walkthrough, see
+  <a href="/blog/write-natural-two-person-podcast-script.html">How to write a natural-sounding two-person podcast script</a>.</p>
+</section>
+
+<section class="section" aria-labelledby="faq-title">
+  <h2 id="faq-title">Frequently asked questions</h2>
+  <details><summary>Is DuoVoice Studio really free?</summary><p>Yes. There is no account and no payment. To keep the service available for everyone, each script has a maximum length and each visitor can generate a limited number of episodes per hour.</p></details>
+  <details><summary>Are the voices real people?</summary><p>No. They are synthetic neural voices from a third-party text-to-speech service. They are not recordings of real people, and the studio does not clone voices.</p></details>
+  <details><summary>Why only two speakers?</summary><p>Two-person conversations cover most interviews, explainers and language dialogues, and keeping to two speakers keeps the studio fast and simple.</p></details>
+  <details><summary>Which languages are supported?</summary><p>There are quick filters for English, Arabic, Japanese, French, Spanish and German, and the &ldquo;All languages&rdquo; option lists every voice the voice service offers.</p></details>
+  <details><summary>Can I use the audio commercially?</summary><p>You keep ownership of your script and you are responsible for how you use the result. Because the voices come from a third-party service, please check that service's terms before using audio in a commercial project. See our <a href="/terms.html">Terms of Service</a>.</p></details>
+  <details><summary>How long are my files kept?</summary><p>Generated files are deleted automatically about two hours after creation, so download what you need right away.</p></details>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; 2026 DuoVoice Studio. Founder: Ahmed.</span>
+    <span class="footer-links">
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/contact.html">Contact</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  let VOICES = [];
+  let DEFAULTS = null;
+  let JOB_ID = null;
+
+  /* ---------- access password (kept only for this browser tab) ---------- */
+  const pwEl = () => $('accessPw');
+  try { const saved = sessionStorage.getItem('dvpw'); if (saved) pwEl().value = saved; } catch (e) { /* ignore */ }
+  const authHeaders = () => {
+    const v = pwEl().value;
+    try { sessionStorage.setItem('dvpw', v); } catch (e) { /* ignore */ }
+    return { 'X-Access-Password': v };
+  };
+
+  async function getJSON(url, opts) {
+    const res = await fetch(url, opts);
+    if (!res.ok) {
+      let detail = res.statusText;
+      try { const j = await res.json(); if (j && j.detail) detail = j.detail; } catch (e) { /* ignore */ }
+      throw new Error(detail);
+    }
+    return res.json();
+  }
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const setStatus = (id, text, cls) => { const e = $(id); e.className = cls || ''; e.textContent = text; };
+
+  /* ---------- voices & speakers ---------- */
+  function voicesFor(prefix) {
+    const vs = prefix ? VOICES.filter((v) => v.name.toLowerCase().startsWith(prefix.toLowerCase())) : VOICES;
+    return vs.length ? vs : VOICES;
+  }
+
+  function pickDefaults(prefix, vs, n) {
+    if ((prefix === 'en' || prefix === '') && DEFAULTS.default_voices_en && DEFAULTS.default_voices_en.length) {
+      return DEFAULTS.default_voices_en.slice(0, n);
+    }
+    const picked = [];
+    const male = vs.find((v) => v.gender === 'Male');
+    const female = vs.find((v) => v.gender === 'Female');
+    [male, female].forEach((v) => { if (v) picked.push(v.name); });
+    vs.forEach((v) => { if (picked.length < n && !picked.includes(v.name)) picked.push(v.name); });
+    while (picked.length < n) picked.push(vs[0].name);
+    return picked.slice(0, n);
+  }
+
+  function buildSpeakers(prefix) {
+    const box = $('speakers');
+    const n = DEFAULTS.max_speakers;
+    const keep = Array.from(box.querySelectorAll('.speaker')).map((d) => ({
+      name: d.querySelector('.sp-name').value,
+      rate: d.querySelector('.sp-rate').value,
+      pitch: d.querySelector('.sp-pitch').value,
+    }));
+    box.innerHTML = '';
+    const vs = voicesFor(prefix);
+    const defs = pickDefaults(prefix, vs, n);
+
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('div');
+      d.className = 'speaker ' + (i === 0 ? 'host' : 'guest');
+      d.innerHTML =
+        '<h3>Speaker ' + (i + 1) + '</h3>' +
+        '<label>Name</label><input type="text" class="sp-name" maxlength="30" aria-label="Speaker ' + (i + 1) + ' name">' +
+        '<label>Voice</label><select class="sp-voice" aria-label="Speaker ' + (i + 1) + ' voice"></select>' +
+        '<label>Speed (%): <span class="rangeval sp-rate-val">0</span></label>' +
+        '<input type="range" class="sp-rate" min="-40" max="40" step="5" value="0" aria-label="Speaker ' + (i + 1) + ' speed">' +
+        '<label>Pitch (Hz): <span class="rangeval sp-pitch-val">0</span></label>' +
+        '<input type="range" class="sp-pitch" min="-20" max="20" step="1" value="0" aria-label="Speaker ' + (i + 1) + ' pitch">';
+
+      const nameIn = d.querySelector('.sp-name');
+      nameIn.value = (keep[i] && keep[i].name) || DEFAULTS.default_names[i] || ('Speaker ' + (i + 1));
+
+      const sel = d.querySelector('.sp-voice');
+      vs.forEach((v) => {
+        const o = document.createElement('option');
+        o.value = v.name;
+        o.textContent = v.name + ' (' + v.gender + ')';
+        if (v.name === defs[i]) o.selected = true;
+        sel.appendChild(o);
+      });
+
+      const rate = d.querySelector('.sp-rate'), rateVal = d.querySelector('.sp-rate-val');
+      const pitch = d.querySelector('.sp-pitch'), pitchVal = d.querySelector('.sp-pitch-val');
+      if (keep[i]) { rate.value = keep[i].rate; pitch.value = keep[i].pitch; }
+      rateVal.textContent = rate.value;
+      pitchVal.textContent = pitch.value;
+      rate.addEventListener('input', () => { rateVal.textContent = rate.value; });
+      pitch.addEventListener('input', () => { pitchVal.textContent = pitch.value; });
+      box.appendChild(d);
+    }
+  }
+
+  function collectSpeakers() {
+    return Array.from(document.querySelectorAll('#speakers .speaker')).map((d) => ({
+      name: d.querySelector('.sp-name').value.trim(),
+      voice: d.querySelector('.sp-voice').value,
+      rate: parseInt(d.querySelector('.sp-rate').value, 10),
+      pitch: parseInt(d.querySelector('.sp-pitch').value, 10),
+    }));
+  }
+
+  /* ---------- sliders & counter ---------- */
+  ['gap', 'maxChars', 'strength', 'musicVol'].forEach((id) => {
+    const input = $(id), out = $(id + 'Val');
+    const upd = () => { out.textContent = input.value; };
+    input.addEventListener('input', upd);
+    upd();
+  });
+
+  function updateCounter() {
+    if (!DEFAULTS) return;
+    const len = $('script').value.length;
+    const max = DEFAULTS.max_script_chars;
+    $('limitsHint').textContent =
+      len.toLocaleString() + ' / ' + max.toLocaleString() + ' characters. ' +
+      'Limit: ' + DEFAULTS.generate_limit_per_hour + ' episodes per hour. ' +
+      'Voice quota this month: ' + DEFAULTS.quota_used.toLocaleString() + ' / ' + DEFAULTS.quota_limit.toLocaleString() + ' characters.';
+    $('limitsHint').style.color = len > max ? '#b91c1c' : '';
+  }
+
+  /* ---------- audio job ---------- */
+  async function pollAudio(jobId) {
+    for (;;) {
+      const job = await getJSON('/api/status/' + jobId);
+      if (job.status === 'queued' || job.status === 'running') {
+        setStatus('status', job.status === 'queued' ? 'Queued\u2026' : 'Generating\u2026 longer scripts take longer.');
+      } else if (job.status === 'done') {
+        setStatus('status', job.message, 'ok');
+        const mp3 = job.files.find((f) => f.endsWith('_with_music.mp3')) || job.files.find((f) => f.endsWith('.mp3'));
+        if (mp3) { $('player').src = '/api/download/' + jobId + '/' + mp3; $('player').style.display = 'block'; }
+        const filesEl = $('files');
+        filesEl.innerHTML = '';
+        job.files.forEach((f) => addFileLink(jobId, f));
+        JOB_ID = jobId;
+        const hasSrt = job.files.some((f) => f.endsWith('.srt'));
+        $('burnSubs').disabled = !hasSrt;
+        if (!hasSrt) $('burnSubs').checked = false;
+        $('burnSubsHint').textContent = hasSrt
+          ? 'Captions follow the subtitle timing of this episode.'
+          : 'To burn in captions, tick "Also create subtitles" and generate the audio again.';
+        $('videoPanel').style.display = 'block';
+        return;
+      } else {
+        setStatus('status', 'Error: ' + (job.error || 'Something went wrong.'), 'error');
+        return;
+      }
+      await sleep(1500);
+    }
+  }
+
+  function addFileLink(jobId, name) {
+    const a = document.createElement('a');
+    a.href = '/api/download/' + jobId + '/' + name;
+    a.textContent = name;
+    a.download = name;
+    $('files').appendChild(a);
+  }
+
+  $('genBtn').addEventListener('click', async () => {
+    const btn = $('genBtn');
+    $('files').innerHTML = '';
+    $('player').style.display = 'none';
+    $('videoPanel').style.display = 'none';
+    $('videoPlayer').style.display = 'none';
+    setStatus('videoStatus', '');
+    JOB_ID = null;
+
+    const payload = {
+      script: $('script').value,
+      speakers: collectSpeakers(),
+      turn_gap: parseFloat($('gap').value),
+      max_chars: parseInt($('maxChars').value, 10),
+      srt: $('srt').checked,
+      jitter: $('jitter').checked,
+      emotion_strength: parseFloat($('strength').value),
+      music_track: $('musicTrack').value || null,
+      music_volume_db: parseFloat($('musicVol').value),
+    };
+    btn.disabled = true;
+    setStatus('status', 'Submitting\u2026');
+    try {
+      const { job_id } = await getJSON('/api/generate', {
+        method: 'POST', headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders()), body: JSON.stringify(payload),
+      });
+      await pollAudio(job_id);
+    } catch (e) {
+      setStatus('status', 'Error: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  /* ---------- video job ---------- */
+  async function pollVideo(jobId) {
+    for (;;) {
+      const v = await getJSON('/api/video-status/' + jobId);
+      if (v.status === 'queued' || v.status === 'running') {
+        setStatus('videoStatus', v.status === 'queued' ? 'Queued\u2026' : 'Rendering video\u2026 this can take a minute or two.');
+      } else if (v.status === 'done') {
+        setStatus('videoStatus', 'Video ready.', 'ok');
+        $('videoPlayer').src = '/api/download/' + jobId + '/' + v.file;
+        $('videoPlayer').style.display = 'block';
+        addFileLink(jobId, v.file);
+        return;
+      } else {
+        setStatus('videoStatus', 'Error: ' + (v.error || 'Something went wrong.'), 'error');
+        return;
+      }
+      await sleep(1500);
+    }
+  }
+
+  $('makeVideoBtn').addEventListener('click', async () => {
+    const btn = $('makeVideoBtn');
+    const files = $('videoImages').files;
+    if (!JOB_ID) return;
+    if (!files.length) { setStatus('videoStatus', 'Choose at least one image first.', 'error'); return; }
+    const form = new FormData();
+    for (const f of files) form.append('images', f);
+    form.append('burn_subtitles', $('burnSubs').checked);
+    form.append('video_format', $('videoFormat').value);
+    btn.disabled = true;
+    setStatus('videoStatus', 'Uploading\u2026');
+    try {
+      await getJSON('/api/attach-video/' + JOB_ID, { method: 'POST', headers: authHeaders(), body: form });
+      await pollVideo(JOB_ID);
+    } catch (e) {
+      setStatus('videoStatus', 'Error: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  /* ---------- start ---------- */
+  async function init() {
+    setStatus('status', 'Loading voices\u2026 (the first visit after a quiet period can take up to a minute)');
+    $('genBtn').disabled = true;
+    try {
+      const [voices, defaults, music] = await Promise.all([
+        getJSON('/api/voices'),
+        getJSON('/api/defaults'),
+        getJSON('/api/music').catch(() => []),
+      ]);
+      VOICES = voices;
+      DEFAULTS = defaults;
+      $('script').value = defaults.example_script;
+      $('emotionList').textContent = defaults.emotions.join(', ');
+      updateCounter();
+      $('script').addEventListener('input', updateCounter);
+
+      const langSel = $('lang');
+      Object.keys(defaults.langs).forEach((label) => {
+        const o = document.createElement('option');
+        o.value = defaults.langs[label];
+        o.textContent = label;
+        if (label === 'English') o.selected = true;
+        langSel.appendChild(o);
+      });
+      langSel.addEventListener('change', () => buildSpeakers(langSel.value));
+      buildSpeakers('en');
+
+      const ms = $('musicTrack');
+      music.forEach((t) => {
+        const o = document.createElement('option');
+        o.value = t.id;
+        o.textContent = t.name + ' \u2014 ' + t.mood;
+        ms.appendChild(o);
+      });
+      setStatus('status', '');
+      $('genBtn').disabled = false;
+    } catch (e) {
+      setStatus('status', 'Could not load the studio (' + e.message + '). Please refresh the page in a moment.', 'error');
+    }
+  }
+  init();
+})();
+</script>
+
+</body>
+</html>

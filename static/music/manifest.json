@@ -1,0 +1,30 @@
+[
+  {
+    "id": "calm-focus",
+    "name": "Calm Focus",
+    "mood": "Soft, steady pad — explainer / educational narration",
+    "file": "calm-focus.mp3",
+    "license": "Original synthesized track, generated for this project — free to use."
+  },
+  {
+    "id": "warm-curiosity",
+    "name": "Warm Curiosity",
+    "mood": "Light, inquisitive pad — trivia / discovery content",
+    "file": "warm-curiosity.mp3",
+    "license": "Original synthesized track, generated for this project — free to use."
+  },
+  {
+    "id": "gentle-mystery",
+    "name": "Gentle Mystery",
+    "mood": "Low, slow-moving drone — curiosity / mystery channels",
+    "file": "gentle-mystery.mp3",
+    "license": "Original synthesized track, generated for this project — free to use."
+  },
+  {
+    "id": "friendly-chat",
+    "name": "Friendly Chat",
+    "mood": "Bright, easygoing pad — conversational / interview podcasts",
+    "file": "friendly-chat.mp3",
+    "license": "Original synthesized track, generated for this project — free to use."
+  }
+]
