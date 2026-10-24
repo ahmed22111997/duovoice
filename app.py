@@ -281,7 +281,7 @@ def _validate_generate(payload: GenerateIn):
             raise HTTPException(400, "Pitch must be between -40 and 40 Hz.")
     if not (0.0 <= payload.turn_gap <= 5.0):
         raise HTTPException(400, "Pause between turns must be between 0 and 5 seconds.")
-    if not (100 <= payload.max_chars <= 8000):
+    if not (100 <= payload.max_chars <= 100000):
         raise HTTPException(400, "Max characters per request must be between 100 and 2000.")
     if not (0.0 <= payload.emotion_strength <= 3.0):
         raise HTTPException(400, "Emotion strength must be between 0 and 3.")
